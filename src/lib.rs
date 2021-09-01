@@ -557,7 +557,11 @@ pub struct LoadAverage {
 impl LoadAverage {
     /// Reads load average info from `/proc/loadavg`
     pub fn new() -> ProcResult<LoadAverage> {
-        let mut f = FileWrapper::open("/proc/loadavg")?;
+        Self::new_with_root(PathBuf::from("/proc/loadavg"))
+    }
+
+    pub fn new_with_root(root: PathBuf) -> ProcResult<LoadAverage> {
+        let mut f = FileWrapper::open(root)?;
         let mut s = String::new();
         f.read_to_string(&mut s)?;
         let mut s = s.split_whitespace();
